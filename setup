@@ -1,0 +1,14 @@
+# for brew
+xcode-select --install
+ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+brew cask install iterm2
+brew cask install intellij-idea
+brew cask install sequel-pro
+brew cask install sublime-text
+
+# to enable zsh
+brew install zsh
+chsh -s /bin/zsh
+zsh
+
