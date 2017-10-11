@@ -1,0 +1,7 @@
+[credential]
+	helper = osxkeychain
+[user]
+	name = piyush-sinha
+	email = piyushsinha.c@flipkart.com
+[alias]
+	current = rev-parse --abbrev-ref HEAD
