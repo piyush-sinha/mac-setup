@@ -1,0 +1,70 @@
+alias c="clear"
+alias gs="git status"
+alias gco="git checkout"
+alias gd="git diff"
+alias ga="git add"
+alias gc="git commit"
+alias gcm="git commit -m"
+alias repo="/Volumes/Code"
+alias rome="cd /Volumes/Code/rome"
+alias rh="cd /Volumes/Code/robinhood"
+alias micii="echo \"mvn idea:clean idea:idea\";mvn idea:clean idea:idea>micii;awk '/BUILD SUCCESS/{print}' micii;rm -rf micii"
+alias rhpreprod="echo \"ssh 10.32.85.21\";ssh 10.32.85.21"
+export GIT_EDITOR=vim
+function pullBranch {
+  #have added current = rev-parse --abbrev-ref HEAD in .gitconfig
+  echo "git pull $(git remote) $(git current)"
+  git pull $(git remote) $(git current)
+  git log --reverse --date=format:'%a %b %Y-%m-%d %I:%M %p' --pretty=format:"%ad: %Cgreen%s%Creset -- %an" | tail -n 15
+}
+function pushBranch {
+  #have added current = rev-parse --abbrev-ref HEAD in .gitconfig
+  echo "git push $(git remote) $(git current)"
+  git push $(git remote) $(git current)
+}
+function mergeBranch {
+  echo "git pull $(git remote) $1"
+  git pull $(git remote) $1
+  git log --reverse --date=format:'%a %b %Y-%m-%d %I:%M %p' --pretty=format:"%ad: %Cgreen%s%Creset -- %an" | tail -n 15
+}
+function mcist {
+  echo "mvn clean install -DskipTests"
+  mvn clean install -DskipTests>mci
+  value=$( grep -ic "BUILD FAILURE" mci )
+  if [ $value -eq 1 ]
+  then
+    echo "BUILD FAILURE"
+    sed -n -e '/COMPILATION ERROR/,$p' mci
+  else
+    awk '/BUILD SUCCESS/{print}' mci
+  fi
+  rm -rf mci
+}
+function mci {
+  echo "mvn clean install"
+  mvn clean install>mci
+  value=$( grep -ic "BUILD FAILURE" mci )
+  if [ $value -eq 1 ]
+  then
+    echo "BUILD FAILURE"
+    sed -n -e '/COMPILATION ERROR/,$p' mci
+  else
+    awk '/Results :/{getline; getline; print}' mci
+    awk '/BUILD SUCCESS/{print}' mci
+  fi
+  rm -rf mci
+}
+function muci {
+  echo "mvn -U clean install"
+  mvn -U clean install>mci
+  value=$( grep -ic "BUILD FAILURE" mci )
+  if [ $value -eq 1 ]
+  then
+    echo "BUILD FAILURE"
+    sed -n -e '/COMPILATION ERROR/,$p' mci
+  else
+    awk '/Results :/{getline; getline; print}' mci
+    awk '/BUILD SUCCESS/{print}' mci
+  fi
+  rm -rf mci
+}
